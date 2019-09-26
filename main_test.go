@@ -1,9 +1,4 @@
 /**
-* thanks to
-* github.com/mpolden/echoip
-* github.com/oschwald/geoip2-golang
-* github.com/oschwald/maxminddb-golang
-* GeoLite2 maxmind Db
 * @author zfzlv
 * 2019/09/26
 */

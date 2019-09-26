@@ -5,12 +5,15 @@ import(
 	"github.com/Zfzlv/ipInfo/geo"
 	"github.com/Zfzlv/ipInfo/util"
 	"fmt"
-	"os"
+	//"os"
 	"math/big"
 	"log"
 	//"time"
-	"os/exec"
+	//"os/exec"
 	"path"
+	//"path/filepath"
+	"strings"
+	"runtime"
 )
 
 type IpInfo struct {
@@ -34,12 +37,23 @@ var(
 
 func init(){
 	log.Println("-init-geoReader-")
-	file, _ := exec.LookPath(os.Args[0])
-    dir,_ := path.Split(file)
-	Reader, err = geo.Open(dir+"/data/GeoLite2-Country.mmdb",dir+"/data/GeoLite2-City.mmdb",dir+"/data/GeoLite2-ASN.mmdb")
+	dir := getCurrentDirectory()
+	Reader, err = geo.Open(dir+"/GeoLite2-Country.mmdb",dir+"/GeoLite2-City.mmdb",dir+"/GeoLite2-ASN.mmdb")
 	if err != nil {
 		log.Fatalln("-init-geoReader-err:-"+err.Error())
 	}
+}
+
+func getCurrentDirectory() string {
+    _, filename, _, ok := runtime.Caller(1)
+   var cwdPath string
+   if ok {
+     cwdPath = path.Join(path.Dir(filename), "")
+   }  else  {
+     cwdPath = "./"
+   }
+   cwdPath = strings.Replace(cwdPath,"iputil","data",-1)
+   return cwdPath
 }
 
 func GetIpInfo(remoteIP string) (IpInfo,error){

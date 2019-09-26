@@ -5,10 +5,12 @@ import(
 	"github.com/Zfzlv/ipInfo/geo"
 	"github.com/Zfzlv/ipInfo/util"
 	"fmt"
-	//"os"
+	"os"
 	"math/big"
 	"log"
-	"time"
+	//"time"
+	"os/exec"
+	"path"
 )
 
 type IpInfo struct {
@@ -31,10 +33,12 @@ var(
 )
 
 func init(){
-	log.Println(time.Now()+"-init-geoReader-")
-	Reader, err = geo.Open("data/GeoLite2-Country.mmdb","data/GeoLite2-City.mmdb","data/GeoLite2-ASN.mmdb")
+	log.Println("-init-geoReader-")
+	file, _ := exec.LookPath(os.Args[0])
+    dir,_ := path.Split(file)
+	Reader, err = geo.Open(dir+"/data/GeoLite2-Country.mmdb",dir+"/data/GeoLite2-City.mmdb",dir+"/data/GeoLite2-ASN.mmdb")
 	if err != nil {
-		log.Fatalln(time.Now()+"-init-geoReader-err:-"+err.Error())
+		log.Fatalln("-init-geoReader-err:-"+err.Error())
 	}
 }
 

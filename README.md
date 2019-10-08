@@ -19,7 +19,7 @@ import "github.com/Zfzlv/ipInfo/iputil"
 
 Example
 
-An example file can be found at [main_test.go](https://github.com/Zfzlv/ipInfo/main_test.go)
+An example file can be found at [main_test.go](https://github.com/Zfzlv/ipInfo/blob/master/main_test.go)
 
 It is as simple as doing this
 

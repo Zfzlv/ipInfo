@@ -15,7 +15,7 @@ import(
 
 func TestGetIpInfo(t *testing.T){
 	fmt.Println(time.Now(),"--test-ipInfo--")
-	r,e := iputil.GetIpInfo("83.145.209.213")
+	r,e := iputil.GetIpInfo("114.84.151.36")
 	if e!=nil{
 		fmt.Println(e.Error())
 	}else{

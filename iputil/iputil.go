@@ -34,6 +34,7 @@ type IpInfo struct {
 
 var (
 	Reader geo.Reader
+	region *reader.GetCnPhy
 	err    error
 )
 
@@ -44,14 +45,14 @@ func init() {
 	if err != nil {
 		log.Fatalln("-init-geoReader-err:-" + err.Error())
 	}
-	region, err := reader.New(dir + "/Cnphy.db")
+	region, err = reader.New(dir + "/Cnphy.db")
 	if err != nil {
 		log.Fatalln("-init-cnPhy-err:-" + err.Error())
 	} else {
 		defer region.Close()
-		//init to memory
+		//init load db to memory
 		ip, _ := region.MemorySearch("8.8.8.8")
-		log.Info(ip)
+		log.Println(ip)
 	}
 }
 
@@ -84,21 +85,18 @@ func GetIpInfo(remoteIP string, outputUseChinese bool) (IpInfo, error) {
 	}
 	if outputUseChinese {
 		cnIp, cnErr := region.MemorySearch(remoteIP)
-		if cnErr == nil && cnIp != "" {
-			str := strings.Split(cnIp, "|")
-			if len(str) > 5 {
-				if str[1] != "0" {
-					country.Name = str[1]
-				}
-				if str[3] != "0" {
-					province = str[3]
-				}
-				if str[4] != "0" {
-					city.Name = str[4]
-				}
-				if str[5] != "0" {
-					asn.AutonomousSystemOrganization = str[5]
-				}
+		if cnErr == nil && cnIp.Country != "0" {
+			if cnIp.Country != "0" {
+				country.Name = cnIp.Country
+			}
+			if cnIp.Province != "0" {
+				province = cnIp.Province
+			}
+			if cnIp.City != "0" {
+				city.Name = cnIp.City
+			}
+			if cnIp.ISP != "0" {
+				asn.AutonomousSystemOrganization = cnIp.ISP
 			}
 		}
 	}

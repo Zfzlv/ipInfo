@@ -1,5 +1,7 @@
 github.com/Zfzlv/ipInfo v0.0.0-20191101085611-0ab520c2b8f8 h1:WhbnBhpf6oNEx17h4qGxXI+cWWPuX2OlmeoWv3Yi5ww=
 github.com/Zfzlv/ipInfo v0.0.0-20191101085611-0ab520c2b8f8/go.mod h1:q6sjWBaQ+HjLZJHaDVfKYPg9ijzMmVMrAoLJ2x4mv9g=
+github.com/Zfzlv/ipInfo v0.0.0-20201021071959-b3cf1d6b869c h1:8TELdFO7Z87BpQYH5a37AM1bA1wT4ZaQf360eINpLCg=
+github.com/Zfzlv/ipInfo v0.0.0-20201021071959-b3cf1d6b869c/go.mod h1:q6sjWBaQ+HjLZJHaDVfKYPg9ijzMmVMrAoLJ2x4mv9g=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/oschwald/maxminddb-golang v1.7.0 h1:JmU4Q1WBv5Q+2KZy5xJI+98aUwTIrPPxZUkd5Cwr8Zc=

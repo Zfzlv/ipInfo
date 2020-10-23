@@ -28,7 +28,7 @@ import "github.com/Zfzlv/ipInfo/iputil"
 
 ...
 
-r,e := iputil.GetIpInfo("180.155.22.93",true)
+r,e := iputil.GetIpInfo("180.155.22.93","") //second param is output lang,now support en/de/es/fr/ja/pt-BR/ru/zh-CN
 if e!=nil{
 	log.Fatalln(e.Error())
 }
@@ -39,8 +39,13 @@ log.Println(string(b))
 
 ## Thanks
 [maxmind](https://dev.maxmind.com/geoip/geoip2/geolite2/)
+<br/>
 [geoip2-golang](https://github.com/oschwald/geoip2-golang)
+<br/>
+[maxminddb-golang](https://github.com/oschwald/maxminddb-golang)
+<br/>
 [echoip](https://github.com/mpolden/echoip)
+<br/>
 [ip2region](https://github.com/lionsoul2014/ip2region)
 
 ## License

@@ -1,28 +1,37 @@
 package geo
 
 import (
+	"github.com/Zfzlv/ipInfo/reader"
 	"math"
 	"net"
-	"github.com/Zfzlv/ipInfo/reader"
 )
 
 type Reader interface {
-	Country(net.IP) (Country, error)
-	City(net.IP) (City, error)
+	Country(net.IP, string) (Country, error)
+	City(net.IP, string) (City, error)
 	ASN(net.IP) (ASN, error)
 	IsEmpty() bool
 }
 
 type Country struct {
-	Name string
-	ISO  string
-	IsEU *bool
+	Continent           string
+	ContinentCode       string
+	Name                string
+	ISO                 string
+	IsEU                *bool
+	IsAnonymousProxy    bool
+	IsSatelliteProvider bool
 }
 
 type City struct {
-	Name      string
-	Latitude  float64
-	Longitude float64
+	Province            string
+	ProvinceCode        string
+	Name                string
+	Latitude            float64
+	Longitude           float64
+	TimeZone            string
+	IsAnonymousProxy    bool
+	IsSatelliteProvider bool
 }
 
 type ASN struct {
@@ -62,7 +71,7 @@ func Open(countryDB, cityDB string, asnDB string) (Reader, error) {
 	return &geoip{country: country, city: city, asn: asn}, nil
 }
 
-func (g *geoip) Country(ip net.IP) (Country, error) {
+func (g *geoip) Country(ip net.IP, lang string) (Country, error) {
 	country := Country{}
 	if g.country == nil {
 		return country, nil
@@ -71,10 +80,10 @@ func (g *geoip) Country(ip net.IP) (Country, error) {
 	if err != nil {
 		return country, err
 	}
-	if c, exists := record.Country.Names["en"]; exists {
+	if c, exists := record.Country.Names[lang]; exists {
 		country.Name = c
 	}
-	if c, exists := record.RegisteredCountry.Names["en"]; exists && country.Name == "" {
+	if c, exists := record.RegisteredCountry.Names[lang]; exists && country.Name == "" {
 		country.Name = c
 	}
 	if record.Country.IsoCode != "" {
@@ -85,10 +94,16 @@ func (g *geoip) Country(ip net.IP) (Country, error) {
 	}
 	isEU := record.Country.IsInEuropeanUnion || record.RegisteredCountry.IsInEuropeanUnion
 	country.IsEU = &isEU
+	if c, exists := record.Continent.Names[lang]; exists {
+		country.Continent = c
+		country.ContinentCode = record.Continent.Code
+	}
+	country.IsAnonymousProxy = record.Traits.IsAnonymousProxy
+	country.IsSatelliteProvider = record.Traits.IsSatelliteProvider
 	return country, nil
 }
 
-func (g *geoip) City(ip net.IP) (City, error) {
+func (g *geoip) City(ip net.IP, lang string) (City, error) {
 	city := City{}
 	if g.city == nil {
 		return city, nil
@@ -97,7 +112,7 @@ func (g *geoip) City(ip net.IP) (City, error) {
 	if err != nil {
 		return city, err
 	}
-	if c, exists := record.City.Names["en"]; exists {
+	if c, exists := record.City.Names[lang]; exists {
 		city.Name = c
 	}
 	if !math.IsNaN(record.Location.Latitude) {
@@ -106,6 +121,15 @@ func (g *geoip) City(ip net.IP) (City, error) {
 	if !math.IsNaN(record.Location.Longitude) {
 		city.Longitude = record.Location.Longitude
 	}
+	city.TimeZone = record.Location.TimeZone
+	if len(record.Subdivisions) > 0 {
+		if c, exists := record.Subdivisions[0].Names[lang]; exists {
+			city.Province = c
+			city.ProvinceCode = record.Subdivisions[0].IsoCode
+		}
+	}
+	city.IsAnonymousProxy = record.Traits.IsAnonymousProxy
+	city.IsSatelliteProvider = record.Traits.IsSatelliteProvider
 	return city, nil
 }
 
